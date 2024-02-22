@@ -1,8 +1,14 @@
 <template>
   <div>
-    <!-- <Drawer /> -->
+    <Drawer
+      v-if="drawerOpen"
+      @createOrder="createOrder"
+      :totalPrice="totalPrice"
+      :taxPrice="taxPrice"
+      :cartButtonDisabled="cartButtonDisabled"
+    />
     <div class="bg-white shadow-2xl w-4/5 m-auto rousnded-xl mt-14">
-      <Header />
+      <Header :total-price="totalPrice" @open-drawer="openDrawer" />
       <div class="p-5">
         <div class="flex justify-between items-center">
           <h2 class="text-3xl font-bold px-8 mb-8">All shoes</h2>
@@ -25,7 +31,7 @@
           </div>
         </div>
         <div class="mt-8">
-          <CardList :items="items" @addToFavorite="addToFavorite" />
+          <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" />
         </div>
       </div>
     </div>
@@ -33,18 +39,71 @@
 </template>
 
 <script setup>
-import { onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 
 import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
-// import Drawer from './components/Drawer.vue'
+import Drawer from './components/Drawer.vue'
 
 const filters = reactive({
   searchQuery: '',
   sortBy: 'title'
 })
+
+const isCreatingOrder = ref(false)
+
 const items = ref([])
+const cart = ref([])
+const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + item.price, 0))
+const taxPrice = computed(() => Math.round(totalPrice.value * 0.12))
+
+const cartIsEmty = computed(() => cart.value.length === 0)
+const cartButtonDisabled = computed(() => isCreatingOrder.value || cartIsEmty.value)
+
+const drawerOpen = ref(false)
+const closeDrawer = () => {
+  drawerOpen.value = false
+}
+const openDrawer = () => {
+  drawerOpen.value = true
+}
+
+const addToCart = (item) => {
+  cart.value.push(item)
+  item.isAdded = true
+}
+
+const removeFromCart = (item) => {
+  cart.value.splice(cart.value.indexOf(item), 1)
+  item.isAdded = false
+
+  localStorage.setItem('cart', JSON.stringify(cart.value))
+}
+
+const createOrder = async () => {
+  try {
+    isCreatingOrder.value = true
+    const { data } = await axios.post('https://3f3ba82986701b54.mokky.dev/orders', {
+      items: cart.value,
+      totalPrice: totalPrice.value
+    })
+    cart.value = []
+    return data
+  } catch (err) {
+    console.error(err)
+  } finally {
+    isCreatingOrder.value = false
+  }
+}
+
+const onClickAddPlus = (item) => {
+  if (!item.isAdded) {
+    addToCart(item)
+  } else {
+    removeFromCart(item)
+  }
+}
 
 const addToFavorite = async (item) => {
   try {
@@ -109,13 +168,46 @@ const fetchItems = async () => {
   }
 }
 
+const updateIsAdded = () => {
+  items.value.forEach((item) => {
+    item.isAdded = cart.value.some((cartItem) => cartItem.id === item.id)
+  })
+}
+
 onMounted(async () => {
+  const localCart = localStorage.getItem('cart')
+  cart.value = localCart ? JSON.parse(localCart) : []
+
   await fetchItems()
+
   await fetchFavorites()
+
+  updateIsAdded()
 })
 
 watch(filters, fetchItems)
-provide('addToFavorite', addToFavorite)
+watch(cart, () => {
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: cart.value.some((cartItem) => cartItem.id === item.id)
+  }))
+})
+
+watch(
+  cart,
+  () => {
+    updateIsAdded()
+    localStorage.setItem('cart', JSON.stringify(cart.value))
+  },
+  { deep: true }
+)
+provide('cart', {
+  cart,
+  closeDrawer,
+  openDrawer,
+  addToCart,
+  removeFromCart
+})
 </script>
 
 <style scoped></style>
