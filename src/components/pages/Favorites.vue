@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>favorites</h2>
     <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" />
   </div>
 </template>
