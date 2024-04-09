@@ -6,7 +6,7 @@
       :totalPrice="totalPrice"
       :taxPrice="taxPrice"
     />
-    <div class="bg-white shadow-2xl w-4/5 m-auto rousnded-xl mt-14">
+    <div class="bg-gray-100 shadow-2xl w-4/5 m-auto rousnded-xl mt-14 rounded-xl mb-12">
       <Header :total-price="totalPrice" @open-drawer="openDrawer" />
       <div class="p-5">
         <router-view> </router-view>

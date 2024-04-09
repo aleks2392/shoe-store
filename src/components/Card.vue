@@ -3,7 +3,7 @@
     class="relative bg-white border border-slate-200 rounded-2xl p-4 cursor-pointer transition hover:-translate-y-2 hover:shadow-2xl"
   >
     <div>
-      <img v-if="showFavoriteBtn" src="/like-1.svg" alt="like1" />
+      <img v-if="showFavoriteBtn" src="/like-1.svg" alt="like1" class="filter grayscale"/>
       <img
         v-if="showFavoriteBtn"
         :src="!isFavorite ? './like-1.svg' : './like-2.svg'"
@@ -40,3 +40,9 @@ const props = defineProps({
 
 const showFavoriteBtn = Boolean(props.onClickAdd)
 </script>
+
+<style scoped>
+.grayscale {
+  filter: grayscale(100%);
+}
+</style>

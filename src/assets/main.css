@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body {
-  background-color: beige;
+  background-image: url('/shoe-store/public/background3.jpg');
 }
