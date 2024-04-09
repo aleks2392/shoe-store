@@ -29,6 +29,7 @@
 <script setup>
 import CardList from '../CardList.vue'
 import axios from 'axios'
+import debounce from 'lodash.debounce' 
 import { inject, reactive, watch, ref, onMounted } from 'vue'
 
 const emit = defineEmits(['update:items'])
@@ -41,9 +42,9 @@ const filters = reactive({
   sortBy: 'title'
 })
 
-const onChangeSearchInput = (event) => {
+const onChangeSearchInput = debounce ((event) => {
   filters.searchQuery = event.target.value
-}
+}, 500)
 
 const onClickAddPlus = (item) => {
   if (!item.isAdded) {
