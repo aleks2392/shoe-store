@@ -3,8 +3,9 @@
     class="relative bg-white border border-slate-200 rounded-2xl p-4 cursor-pointer transition hover:-translate-y-2 hover:shadow-2xl"
   >
     <div>
-      <img src="/like-1.svg" alt="like1" />
+      <img v-if="showFavoriteBtn" src="/like-1.svg" alt="like1" />
       <img
+        v-if="showFavoriteBtn"
         :src="!isFavorite ? './like-1.svg' : './like-2.svg'"
         alt="like1"
         class="absolute top-4 left-4"
@@ -16,17 +17,17 @@
 
       <div class="flex justify-between mt-4">
         <div class="flex flex-col">
-          <span class="text-slate-500">Price:</span>
-          <b>{{ price }} $</b>
+          <span class="text-slate-500">Price: <b>{{ price }} $</b></span>
+          
         </div>
-        <img @click="onClickAdd" :src="!isAdded ? './plus.svg' : './checked.svg'" alt="add" />
+        <img v-if="showFavoriteBtn" @click="onClickAdd" :src="!isAdded ? './plus.svg' : './checked.svg'" alt="add" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   id: Number,
   title: String,
   imageUrl: String,
@@ -36,4 +37,6 @@ defineProps({
   onClickFavorite: Function,
   onClickAdd: Function
 })
+
+const showFavoriteBtn = Boolean(props.onClickAdd)
 </script>

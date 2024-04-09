@@ -92,7 +92,6 @@ const fetchItems = async () => {
       favoriteId: null,
       isAdded: false
     }))
-    console.log(items.value)
   } catch (err) {
     console.log(err)
   }

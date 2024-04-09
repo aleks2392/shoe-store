@@ -1,6 +1,7 @@
 <template>
   <div>
-    <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" />
+    <h2 class="text-3xl font-bold px-8 mb-8">My Favorites Shoes</h2>
+    <CardList :items="favorites" is-favorites />
   </div>
 </template>
 
@@ -12,9 +13,9 @@ import CardList from '../CardList.vue'
 const favorites = ref([])
 onMounted(async () => {
   try {
-    const { data } = await axios.get('https://3f3ba82986701b54.mokky.dev/favorites_relations=items')
+    const { data } = await axios.get('https://3f3ba82986701b54.mokky.dev/favorites?_relations=items')
 
-    favorites.value = data
+    favorites.value = data.map((obj) => obj.item);
   } catch (err) {
     console.error(err)
   }
