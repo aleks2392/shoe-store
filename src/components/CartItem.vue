@@ -10,7 +10,7 @@
           @click="emit('onClickRemove')"
           class="opacity-50 cursor-pointer hover:opacity-100 transition ml-auto"
           src="/close.svg"
-          alt="asdas"
+          alt="close"
         />
       </div>
     </div>

@@ -1,26 +1,24 @@
 <template>
   <div
-    class="relative bg-white border border-slate-200 rounded-2xl p-4 cursor-pointer transition hover:-translate-y-2 hover:shadow-2xl"
+    class="relative bg-white border border-slate-200 rounded-2xl p-4 cursor-pointer transition duration-200 ease-in-out hover:-translate-y-2 hover:shadow-2xl flex flex-col h-80"
   >
-    <div>
-      <img v-if="showFavoriteBtn" src="/like-1.svg" alt="like1" class="filter grayscale"/>
-      <img
-        v-if="showFavoriteBtn"
-        :src="!isFavorite ? './like-1.svg' : './like-2.svg'"
-        alt="like1"
-        class="absolute top-4 left-4"
-        @click="onClickFavorite"
-      />
+    <img v-if="showFavoriteBtn" src="/like-1.svg" alt="like1" class="filter grayscale absolute top-4 left-4"/>
+    <img v-if="showFavoriteBtn" :src="!isFavorite ? './like-1.svg' : './like-2.svg'" alt="like2"
+         class="absolute top-4 left-4 cursor-pointer" @click="onClickFavorite" />
+    <div class="foto" style="max-height: 70%; width: 70%;">
+      <img :src="imageUrl" alt="sneakers" class="mt-2 ml-8" />
+    </div>    
 
-      <img :src="imageUrl" alt="sneakers" />
-      <p class="mt-2">{{ title }}</p>
-
-      <div class="flex justify-between mt-4">
-        <div class="flex flex-col">
-          <span class="text-slate-500">Price: <b>{{ price }} $</b></span>
-          
+    <div class="flex-grow flex flex-col justify-between">
+      <div class="s"></div>
+      <div>
+        <p class="mt-2">{{ title }}</p>
+        <div class="flex justify-between mt-4">
+          <div class="flex flex-col">
+            <span class="text-slate-500">Price: <b>{{ price }} $</b></span>
+          </div>
+          <img v-if="showFavoriteBtn" @click="onClickAdd" :src="!isAdded ? './plus.svg' : './checked.svg'" alt="add" />
         </div>
-        <img v-if="showFavoriteBtn" @click="onClickAdd" :src="!isAdded ? './plus.svg' : './checked.svg'" alt="add" />
       </div>
     </div>
   </div>
@@ -42,6 +40,9 @@ const showFavoriteBtn = Boolean(props.onClickAdd)
 </script>
 
 <style scoped>
+.foto {
+  margin-top: -25px;
+}
 .grayscale {
   filter: grayscale(100%);
 }

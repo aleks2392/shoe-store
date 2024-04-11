@@ -66,15 +66,16 @@ const orderId = ref(null)
 
 
 const createOrder = async () => {
+  if(cart.value.length === 0) return; 
+
+  isCreatingOrder.value = true
   try {
-    isCreatingOrder.value = true
     const { data } = await axios.post('https://3f3ba82986701b54.mokky.dev/orders', {
       items: cart.value,
-      totalPrice: props.totalPrice.value
+      totalPrice: props.totalPrice
     })
-    cart.value = []
-
     orderId.value = data.id
+    cart.value = []
   } catch (err) {
     console.error(err)
   } finally {

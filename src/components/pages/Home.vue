@@ -4,24 +4,24 @@
       <h2 class="text-3xl font-bold px-8 mb-8">All shoes</h2>
       <div class="flex gap-4">
         <select @change="onChangeSelect" class="px-3 border rounded-md outline-none py-2">
-          <option value="name">Search by name</option>
-          <option value="price">Search by price(cheap)</option>
-          <option value="-price">Search by price(expensive)</option>
+          <option value="title">Search by name</option>
+          <option value="price">Search by price (cheap)</option>
+          <option value="-price">Search by price (expensive)</option>
         </select>
-
+        
         <div class="relative">
-          <img class="absolute left-3 top-3" src="/search.svg" />
+          <img class="absolute left-3 top-3" src="/search.svg" alt="Search Icon" />
           <input
             @input="onChangeSearchInput"
             class="border py-2 pl-10 pr-4 outline-none rounded-md focus:border-gray-500"
             type="text"
-            placeholder="search..."
+            placeholder="Search..."
           />
         </div>
       </div>
     </div>
     <div class="mt-8">
-      <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" />
+      <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" :key="componentKey" />
     </div>
   </div>
 </template>
