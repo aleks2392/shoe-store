@@ -40,9 +40,7 @@ const showFavoriteBtn = Boolean(props.onClickAdd)
 </script>
 
 <style scoped>
-.foto {
-  margin-top: -25px;
-}
+
 .grayscale {
   filter: grayscale(100%);
 }
